@@ -38,7 +38,7 @@ class Category
         minMessage:"La catégorie doit avoir plus de {{ limit }} caractères",
         maxMessage:"La catégorie doit ne doit pas dépasser {{ limit }} caractères"
     )]
-    #[Groups(['listCategorySimple','listCategoryFull','listUserSimple'])]
+    #[Groups(['listCategorySimple','listCategoryFull','listUserSimple','listResourceSimple'])]
     private $catName;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Resource::class)]

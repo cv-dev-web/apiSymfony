@@ -20,11 +20,11 @@ class User
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listCategoryFull','listUserFull','listUserSimple'])]
+    #[Groups(['listCategoryFull','listUserFull','listUserSimple','listResourceSimple'])]
     private $lastName;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listCategoryFull','listUserFull','listUserSimple'])]
+    #[Groups(['listCategoryFull','listUserFull','listUserSimple','listResourceSimple'])]
     private $firstName;
 
     #[ORM\Column(type: 'date')]
@@ -32,7 +32,7 @@ class User
     private $birthDate;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listCategoryFull','listUserFull','listUserSimple'])]
+    #[Groups(['listCategoryFull','listUserFull','listUserSimple','listResourceSimple'])]
     private $email;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -53,9 +53,17 @@ class User
     #[Groups(['listUserSimple'])]
     private $grade;
 
+    #[ORM\Column(type: 'string', length: 10)]
+    private $phone;
+
+    #[ORM\Column(type: 'datetime')]
+    private $userCreationDate;
+
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Resource::class)]
     #[Groups(['listUserSimple'])]
     private $resources;
+
+   
 
     public function __construct()
     {
@@ -174,6 +182,29 @@ class User
 
         return $this;
     }
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getUserCreationDate(): ?\DateTimeInterface
+    {
+        return $this->userCreationDate;
+    }
+
+    public function setUserCreationDate(\DateTimeInterface $userCreationDate): self
+    {
+        $this->userCreationDate = $userCreationDate;
+
+        return $this;
+    }
 
     /**
      * @return Collection<int, Resource>
@@ -204,4 +235,6 @@ class User
 
         return $this;
     }
+
+    
 }

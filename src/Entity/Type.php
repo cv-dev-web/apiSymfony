@@ -6,27 +6,43 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TypeRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeRepository::class)]
-#[ApiResource(
-    collectionOperations: ['get'],
-    itemOperations: ['get'],
+#[ApiResource( 
+    collectionOperations: [
+    'get_types' =>
+        ['method' => 'get',
+        'path'=> '/types/show_types',
+        'normalization_context'=>['groups' => 'listTypes']
+        ]
+    ],
+    itemOperations: [
+    'get_type_detail' =>
+        ['method' => 'get',
+        'path'=> '/types/{id}/show_type_detail',
+        'normalization_context'=>['groups' => 'listTypeDetail']
+        ]
+]
 )]
 class Type
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['listTypes'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listCategoryFull','listUserSimple'])]
+    #[Groups(['listCategoryFull','listUserSimple','listTypes'])]
     private $typeName;
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Resource::class)]
     #[ApiResource()]
+    #[ApiSubresource]
+    #[Groups(['listTypesDetail'])]
     private $resources;
 
     public function __construct()

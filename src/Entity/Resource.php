@@ -2,13 +2,18 @@
 
 namespace App\Entity;
 
+use App\Entity\Content;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ResourceRepository;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['listResourceSimple']]
+)]
 class Resource
 {
     #[ORM\Id]
@@ -17,30 +22,30 @@ class Resource
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listCategoryFull','listUserSimple','listContentDetail'])]
+    #[Groups(['listCategoryFull','listUserSimple','listContentDetail','listResourceSimple','listTypesDetail'])]
     private $title;
 
     #[ORM\Column(type: 'boolean')]
     private $visibility;
 
     #[ORM\Column(type: 'datetime')]
-    #[Groups(['listCategoryFull','listUserSimple'])]
+    #[Groups(['listCategoryFull','listUserSimple','listResourceSimple','listTypesDetail'])]
     private $creationDate;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['listCategoryFull'])]
+    #[Groups(['listCategoryFull','listResourceSimple'])]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['listUserSimple'])]
+    #[Groups(['listUserSimple','listResourceSimple'])]
     private $category;
 
-    #[ORM\OneToOne(targetEntity: Content::class, inversedBy: 'resources')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['listCategoryFull','listUserSimple'])]
-    private $content;
+    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Content::class)]
+    #[ApiSubresource]
+    #[Groups(['listResourceSimple'])]
+    private $contents;
 
     #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
@@ -49,6 +54,14 @@ class Resource
 
     #[ORM\Column(type: 'boolean')]
     private $modoValid;
+
+    #[ORM\Column(type: 'text')]
+    private $text;
+
+    public function __construct()
+    {
+        $this->contents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -111,20 +124,7 @@ class Resource
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
-
-        return $this;
-    }
-
-    public function getContent(): ?Content
-    {
-        return $this->content;
-    }
-
-    public function setContent(?Content $content): self
-    {
-        $this->content = $content;
-
-        return $this;
+        
     }
 
     public function getType(): ?Type
@@ -147,6 +147,47 @@ class Resource
     public function setModoValid(bool $modoValid): self
     {
         $this->modoValid = $modoValid;
+
+        return $this;
+    }
+
+    public function getText(): ?string
+    {
+        return $this->text;
+    }
+
+    public function setText(string $text): self
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+     /**
+     * @return Collection<int, Content>
+     */
+    public function getContents(): Collection
+    {
+        return $this->contents;
+    }
+
+    public function addContent(Content $content): self
+    {
+        if (!$this->contents->contains($content)) {
+            $this->contents[] = $content;
+            $content->setResource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContent(Content $content): self
+    {
+        if ($this->contents->removeElement($content)) {
+            // set the owning side to null (unless already changed)
+            if ($content->getResource() === $this) {
+                $content->setResource(null);
+            }
+        }
 
         return $this;
     }
