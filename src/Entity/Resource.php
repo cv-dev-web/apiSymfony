@@ -11,9 +11,7 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
-#[ApiResource(
-    normalizationContext: ['groups' => ['listResourceSimple']]
-)]
+#[ApiResource()]
 class Resource
 {
     #[ORM\Id]
@@ -22,34 +20,28 @@ class Resource
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listCategoryFull','listUserSimple','listContentDetail','listResourceSimple','listTypesDetail'])]
     private $title;
 
     #[ORM\Column(type: 'boolean')]
     private $visibility;
 
     #[ORM\Column(type: 'datetime')]
-    #[Groups(['listCategoryFull','listUserSimple','listResourceSimple','listTypesDetail'])]
     private $creationDate;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['listCategoryFull','listResourceSimple'])]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['listUserSimple','listResourceSimple'])]
     private $category;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Content::class)]
-    #[ApiSubresource]
-    #[Groups(['listResourceSimple'])]
+    //#[ApiSubresource]
     private $contents;
 
     #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['listCategoryFull','listUserSimple'])]
     private $type;
 
     #[ORM\Column(type: 'boolean')]

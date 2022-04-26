@@ -16,30 +16,25 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['listUserFull','listUserSimple'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listCategoryFull','listUserFull','listUserSimple','listResourceSimple'])]
     private $lastName;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listCategoryFull','listUserFull','listUserSimple','listResourceSimple'])]
     private $firstName;
 
     #[ORM\Column(type: 'date')]
-    #[Groups(['listCategoryFull','listUserFull','listUserSimple'])]
     private $birthDate;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listCategoryFull','listUserFull','listUserSimple','listResourceSimple'])]
     private $email;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $password;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(['listCategoryFull','listUserFull','listUserSimple'])]
+  
     private $avatar;
 
     #[ORM\Column(type: 'boolean')]
@@ -50,7 +45,6 @@ class User
 
     #[ORM\ManyToOne(targetEntity: Grade::class, inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['listUserSimple'])]
     private $grade;
 
     #[ORM\Column(type: 'string', length: 10)]
@@ -60,7 +54,6 @@ class User
     private $userCreationDate;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Resource::class)]
-    #[Groups(['listUserSimple'])]
     private $resources;
 
    

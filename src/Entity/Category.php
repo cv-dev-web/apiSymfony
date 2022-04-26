@@ -16,8 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ApiResource(
     collectionOperations: ['get'],
-    itemOperations: ['get'],
-    normalizationContext: ['groups' => ['listCategorySimple']]
+    itemOperations: ['get']
 )]
 #[UniqueEntity(
     fields: ['catName'],
@@ -28,7 +27,7 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['listCategorySimple','listCategoryFull'])]
+    //#[Groups(['listCategorySimple','listCategoryFull'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -43,7 +42,7 @@ class Category
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Resource::class)]
     #[Groups(['listCategoryFull'])]
-    #[ApiSubresource]
+    //#[ApiSubresource]
     private $resources;
 
     public function __construct()

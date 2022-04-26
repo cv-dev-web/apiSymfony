@@ -12,19 +12,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: GradeRepository::class)]
 #[ApiResource(
     collectionOperations: ['get'],
-    itemOperations: ['get'],
+    itemOperations: ['get']
 )]
 class Grade
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['listUserSimple'])]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listUserSimple'])]
-    private $gradeName;
+    #[ORM\Column(type: 'string', length: 255)] private $gradeName;
 
     #[ORM\OneToMany(mappedBy: 'grade', targetEntity: User::class)]
     private $users;

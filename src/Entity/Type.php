@@ -12,37 +12,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeRepository::class)]
 #[ApiResource( 
-    collectionOperations: [
-    'get_types' =>
-        ['method' => 'get',
-        'path'=> '/types/show_types',
-        'normalization_context'=>['groups' => 'listTypes']
-        ]
-    ],
-    itemOperations: [
-    'get_type_detail' =>
-        ['method' => 'get',
-        'path'=> '/types/{id}/show_type_detail',
-        'normalization_context'=>['groups' => 'listTypeDetail']
-        ]
-]
+    collectionOperations: ['get'],
+    itemOperations: ['get']
 )]
 class Type
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['listTypes'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listCategoryFull','listUserSimple','listTypes'])]
     private $typeName;
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Resource::class)]
-    #[ApiResource()]
-    #[ApiSubresource]
-    #[Groups(['listTypesDetail'])]
+    //#[ApiResource()]
+    //#[ApiSubresource]
     private $resources;
 
     public function __construct()

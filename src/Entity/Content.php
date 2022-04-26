@@ -12,8 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: ContentRepository::class)]
 #[ApiResource(
     collectionOperations: ['get'],
-    itemOperations: ['get'],
-    normalizationContext: ['groups' => ['listContents']]
+    itemOperations: ['get']
 )]
 class Content
 {
@@ -23,7 +22,7 @@ class Content
     private $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(['listCategoryFull','listUserSimple','listContents','listContentDetail'])]
+    //#[Groups(['listCategoryFull','listUserSimple','listContents','listContentDetail'])]
     private $chemin;
 
     #[ORM\ManyToOne(targetEntity: Resource::class, inversedBy: 'contents')]
