@@ -5,13 +5,20 @@ namespace App\Entity;
 use App\Entity\Content;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ResourceRepository;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
 #[ApiResource()]
+#[ApiFilter(
+    SearchFilter::class,
+     properties: [  'title' => 'ipartial']
+)]
 class Resource
 {
     #[ORM\Id]

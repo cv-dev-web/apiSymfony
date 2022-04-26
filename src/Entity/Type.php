@@ -13,7 +13,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: TypeRepository::class)]
 #[ApiResource( 
     collectionOperations: ['get'],
-    itemOperations: ['get']
+    itemOperations: ['get'],
+    order: ['typeName' => 'ASC'],
 )]
 class Type
 {

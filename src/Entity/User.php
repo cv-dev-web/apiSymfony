@@ -10,7 +10,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    order: ['lastName' => 'ASC','firstName' => 'ASC'],
+)]
 class User
 {
     #[ORM\Id]
@@ -28,6 +30,9 @@ class User
     private $birthDate;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Email(
+        message: 'L\'Email {{ value }} n\'est pas valide.',
+    )]
     private $email;
 
     #[ORM\Column(type: 'string', length: 255)]
