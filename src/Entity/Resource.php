@@ -24,23 +24,28 @@ class Resource
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['listResourceFull'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['listResourceFull'])]
     private $title;
 
     #[ORM\Column(type: 'boolean')]
     private $visibility;
 
     #[ORM\Column(type: 'datetime')]
+    #[Groups(['listResourceFull'])]
     private $creationDate;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['listResourceFull'])]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['listResourceFull'])]
     private $category;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Content::class)]
@@ -49,12 +54,15 @@ class Resource
 
     #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['listResourceFull'])]
     private $type;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups(['listResourceFull'])]
     private $modoValid;
 
     #[ORM\Column(type: 'text')]
+    #[Groups(['listResourceFull'])]
     private $text;
 
     public function __construct()

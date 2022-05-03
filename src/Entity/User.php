@@ -18,12 +18,15 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['listResourceFull'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['listResourceFull'])]
     private $lastName;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['listResourceFull'])]
     private $firstName;
 
     #[ORM\Column(type: 'date')]
@@ -33,13 +36,14 @@ class User
     #[Assert\Email(
         message: 'L\'Email {{ value }} n\'est pas valide.',
     )]
+    #[Groups(['listResourceFull'])]
     private $email;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $password;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-  
+    #[Groups(['listResourceFull'])]
     private $avatar;
 
     #[ORM\Column(type: 'boolean')]

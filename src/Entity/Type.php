@@ -21,12 +21,14 @@ class Type
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['listResourceFull'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $typeName;
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Resource::class)]
+    #[Groups(['listResourceFull'])]
     //#[ApiResource()]
     //#[ApiSubresource]
     private $resources;

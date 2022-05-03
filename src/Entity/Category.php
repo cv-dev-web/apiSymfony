@@ -29,6 +29,7 @@ class Category
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     //#[Groups(['listCategorySimple','listCategoryFull'])]
+    #[Groups(['listResourceFull'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -38,7 +39,8 @@ class Category
         minMessage:"La catégorie doit avoir plus de {{ limit }} caractères",
         maxMessage:"La catégorie doit ne doit pas dépasser {{ limit }} caractères"
     )]
-    #[Groups(['listCategorySimple','listCategoryFull','listUserSimple','listResourceSimple'])]
+    #[Groups(['listResourceFull'])]
+    //#[Groups(['listCategorySimple','listCategoryFull','listUserSimple','listResourceSimple'])]
     private $catName;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Resource::class)]
