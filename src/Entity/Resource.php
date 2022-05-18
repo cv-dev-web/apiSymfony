@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Content;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ResourceRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
@@ -65,9 +66,13 @@ class Resource
     #[Groups(['listResourceFull'])]
     private $text;
 
+    #[ORM\OneToMany(mappedBy: 'resources', targetEntity: Level::class)]
+    private $levels;
+
     public function __construct()
     {
         $this->contents = new ArrayCollection();
+        $this->levels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -193,6 +198,36 @@ class Resource
             // set the owning side to null (unless already changed)
             if ($content->getResource() === $this) {
                 $content->setResource(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Level>
+     */
+    public function getLevels(): Collection
+    {
+        return $this->levels;
+    }
+
+    public function addLevel(Level $level): self
+    {
+        if (!$this->levels->contains($level)) {
+            $this->levels[] = $level;
+            $level->setResources($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLevel(Level $level): self
+    {
+        if ($this->levels->removeElement($level)) {
+            // set the owning side to null (unless already changed)
+            if ($level->getResources() === $this) {
+                $level->setResources(null);
             }
         }
 

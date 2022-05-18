@@ -78,11 +78,15 @@ class User
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Resource::class)]
     private $resources;
 
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Level::class)]
+    private $levels;
+
    
 
     public function __construct()
     {
         $this->resources = new ArrayCollection();
+        $this->levels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -245,6 +249,36 @@ class User
             // set the owning side to null (unless already changed)
             if ($resource->getUser() === $this) {
                 $resource->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Level>
+     */
+    public function getLevels(): Collection
+    {
+        return $this->levels;
+    }
+
+    public function addLevel(Level $level): self
+    {
+        if (!$this->levels->contains($level)) {
+            $this->levels[] = $level;
+            $level->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLevel(Level $level): self
+    {
+        if ($this->levels->removeElement($level)) {
+            // set the owning side to null (unless already changed)
+            if ($level->getUsers() === $this) {
+                $level->setUsers(null);
             }
         }
 
