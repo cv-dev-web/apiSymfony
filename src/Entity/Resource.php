@@ -69,6 +69,10 @@ class Resource
     #[ORM\OneToMany(mappedBy: 'resources', targetEntity: Level::class)]
     private $levels;
 
+    #[ORM\ManyToOne(targetEntity: Status::class, inversedBy: 'resources')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $status;
+
     public function __construct()
     {
         $this->contents = new ArrayCollection();
@@ -230,6 +234,18 @@ class Resource
                 $level->setResources(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }
