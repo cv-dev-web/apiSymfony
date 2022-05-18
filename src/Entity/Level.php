@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\LevelRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\LevelRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: LevelRepository::class)]
 /**
