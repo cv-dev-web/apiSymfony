@@ -4,5 +4,11 @@ api_platform:
     patch_formats:
         json: ['application/merge-patch+json']
         #json:     ['application/json']
+    #formats:
+        #json:
+            #mime_types: ['application/json']
     swagger:
         versions: [3]
+    #collection: 
+        #pagination:
+            #items_per_page: 5

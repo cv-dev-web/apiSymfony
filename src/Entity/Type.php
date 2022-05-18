@@ -11,6 +11,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TypeRepository::class)]
+/**
+ * Limitation de l'entité Type a la lecture ce celle-ci 
+ * ordonée par ordre croissant.
+ */
 #[ApiResource( 
     collectionOperations: ['get'],
     itemOperations: ['get'],
@@ -29,7 +33,7 @@ class Type
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Resource::class)]
     #[Groups(['listResourceFull'])]
-    //#[ApiResource()]
+
     //#[ApiSubresource]
     private $resources;
 

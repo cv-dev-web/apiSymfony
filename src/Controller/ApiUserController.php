@@ -18,6 +18,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiUserController extends AbstractController
 {
+    /**
+     * Api manuelle 
+     * Méthode pour faire apparaître tout les utilisateurs
+     *
+     * @param UserRepository $repo
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/users', name: 'api_users',methods:["GET"])]
     public function list(UserRepository $repo, SerializerInterface $serializer): Response
     {
@@ -30,7 +38,14 @@ class ApiUserController extends AbstractController
         
         return new JsonResponse($resultat, 200,[],true);
     }
-
+    /**
+     * Api manuelle 
+     * Méthode pour faire apparaître un seul utilisateur, selon Id.
+     *
+     * @param User $user
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/user/{id}', name: 'api_user_show',methods:["GET"])]
     public function show(User $user, SerializerInterface $serializer): Response
     {
@@ -42,7 +57,17 @@ class ApiUserController extends AbstractController
         
         return new JsonResponse($resultat,Response :: HTTP_OK,[],true);
     }
-
+    /**
+     * Api manuelle 
+     * Méthode pour creer un nouvel utilisateur
+     *
+     * @param GradeRepository $repoGrade
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @return Response
+     */
     #[Route('/api/user', name: 'api_user_create',methods:["POST"])]
     public function create(GradeRepository $repoGrade, Request $request,EntityManagerInterface $manager, SerializerInterface $serializer,ValidatorInterface $validator): Response
     {
@@ -79,7 +104,17 @@ class ApiUserController extends AbstractController
         );
        
     }
-
+    /**
+     *  Api manuelle 
+     *  Méthode pour modifier un utilisateur
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager@param 
+     * @param User $user
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @return Response
+     */
     #[Route('/api/user/{id}', name: 'api_user_update',methods:["PUT"])]
     public function update(GradeRepository $repoGrade,Request $request,EntityManagerInterface $manager, User $user, SerializerInterface $serializer,ValidatorInterface $validator): Response
     {
@@ -109,7 +144,15 @@ class ApiUserController extends AbstractController
             true
         );
     }
-
+    /**
+     * Api manuelle 
+     * Méthode pour supprimer un utilisateur
+     *
+     * @param EntityManagerInterface $manager@param 
+     * @param User $user
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/user/{id}', name: 'api_user_delete',methods:["DELETE"])]
     public function delete(EntityManagerInterface $manager, User $user, SerializerInterface $serializer): Response
     {

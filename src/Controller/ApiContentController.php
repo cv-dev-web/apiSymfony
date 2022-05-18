@@ -17,6 +17,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiContentController extends AbstractController
 {
+    /**
+     *  Api manuelle 
+     *  Méthode pour faire apparaître tout les contenus
+     *
+     * @param ContentRepository $repo
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/contents', name: 'api_contents',methods:["GET"])]
     public function list(ContentRepository $repo, SerializerInterface $serializer): Response
     {
@@ -30,6 +38,14 @@ class ApiContentController extends AbstractController
         return new JsonResponse($resultat, 200,[],true);
     }
 
+    /**
+     * Api manuelle 
+     * Méthode pour faire apparaître un seul contenu, selon Id.
+     *
+     * @param Content $content
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/content/{id}', name: 'api_content_show',methods:["GET"])]
     public function show(Content $content, SerializerInterface $serializer): Response
     {
@@ -41,7 +57,16 @@ class ApiContentController extends AbstractController
         
         return new JsonResponse($resultat,Response :: HTTP_OK,[],true);
     }
-
+    /**
+     * Api manuelle 
+     * Méthode pour creer un nouveau contenu
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @return Response
+     */
     #[Route('/api/content', name: 'api_content_create',methods:["POST"])]
     public function create(Request $request,EntityManagerInterface $manager, SerializerInterface $serializer,ValidatorInterface $validator): Response
     {
@@ -73,7 +98,17 @@ class ApiContentController extends AbstractController
         );
        
     }
-
+    /**
+     *  Api manuelle 
+     *  Méthode pour modifier un contenu
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager@param 
+     * @param Content $content
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @return Response
+     */
     #[Route('/api/content/{id}', name: 'api_content_update',methods:["PUT"])]
     public function update(Request $request,EntityManagerInterface $manager, Content $content, SerializerInterface $serializer,ValidatorInterface $validator): Response
     {
@@ -92,7 +127,15 @@ class ApiContentController extends AbstractController
         
         return new JsonResponse('La catégorie a bien été modifié',Response :: HTTP_OK,[],true);
     }
-
+    /**
+     * Api manuelle 
+     * Méthode pour supprimer une catégorie
+     *
+     * @param EntityManagerInterface $manager@param 
+     * @param Content $content
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/content/{id}', name: 'api_content_delete',methods:["DELETE"])]
     public function delete(EntityManagerInterface $manager, Content $content, SerializerInterface $serializer): Response
     {

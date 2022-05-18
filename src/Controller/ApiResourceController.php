@@ -17,6 +17,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiResourceController extends AbstractController
 {
+    /**
+     * Api manuelle 
+     * Méthode pour faire apparaître toutes les ressources
+     *
+     * @param ResourceRepository $repo
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/resources', name: 'api_resources',methods:["GET"])]
     public function list(ResourceRepository $repo, SerializerInterface $serializer): Response
     {
@@ -29,7 +37,14 @@ class ApiResourceController extends AbstractController
         
         return new JsonResponse($resultat, 200,[],true);
     }
-
+    /**
+     * Api manuelle 
+     * Méthode pour faire apparaître une seule ressource, selon Id.
+     *
+     * @param Resource $resource
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/resource/{id}', name: 'api_resource_show',methods:["GET"])]
     public function show(Resource $resource, SerializerInterface $serializer): Response
     {
@@ -41,7 +56,16 @@ class ApiResourceController extends AbstractController
         
         return new JsonResponse($resultat,Response :: HTTP_OK,[],true);
     }
-
+    /**
+     * Api manuelle 
+     * Méthode pour creer une nouvelle ressource
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @return Response
+     */
     #[Route('/api/resource', name: 'api_resource_create',methods:["POST"])]
     public function create(Request $request,EntityManagerInterface $manager, SerializerInterface $serializer,ValidatorInterface $validator): Response
     {
@@ -73,7 +97,17 @@ class ApiResourceController extends AbstractController
         );
        
     }
-
+    /**
+     * Api manuelle 
+     * Méthode pour modifier une ressource
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager@param 
+     * @param Resource $resource
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @return Response
+     */
     #[Route('/api/resource/{id}', name: 'api_resource_update',methods:["PUT"])]
     public function update(Request $request,EntityManagerInterface $manager, Resource $resource, SerializerInterface $serializer,ValidatorInterface $validator): Response
     {
@@ -92,7 +126,15 @@ class ApiResourceController extends AbstractController
         
         return new JsonResponse('La catégorie a bien été modifié',Response :: HTTP_OK,[],true);
     }
-
+    /**
+     * Api manuelle 
+     * Méthode pour supprimer une ressource
+     *
+     * @param EntityManagerInterface $manager@param 
+     * @param Resource $resource
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/resource/{id}', name: 'api_resource_delete',methods:["DELETE"])]
     public function delete(EntityManagerInterface $manager, Resource $resource, SerializerInterface $serializer): Response
     {

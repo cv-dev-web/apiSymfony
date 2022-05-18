@@ -14,11 +14,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
+/**
+ * Limitation de l'entité Catégory a la lecture ce celle-ci 
+ * ordonée par ordre croissant.
+ */
 #[ApiResource(
     collectionOperations: ['get'],
     itemOperations: ['get'],
     order: ['catName' => 'ASC'],
 )]
+/**
+ * Vérification que chaque catégorie sois unique avec retour méssage d'erreur
+ */
 #[UniqueEntity(
     fields: ['catName'],
     message :"La catégorie {{ value }} est déja utilisée"
@@ -33,6 +40,10 @@ class Category
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * Limitation du nombre de caractère entre 2 et 50
+     * avec retour méssage d'erreur.
+     */
     #[Assert\Length(
         min : 2,
         max : 50,

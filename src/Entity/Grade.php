@@ -10,6 +10,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: GradeRepository::class)]
+/**
+ * Limitation de l'entité Grade a la lecture ce celle-ci.
+ */
 #[ApiResource(
     collectionOperations: ['get'],
     itemOperations: ['get']

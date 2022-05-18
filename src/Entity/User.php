@@ -10,6 +10,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+/**
+ * Vérification que chaque EMAIL sois unique avec retour méssage d'erreur
+ */
+#[UniqueEntity(
+    fields: ['email'],
+    message :"L'email {{ value }} est déja utilisée"
+    )]
+/**
+ * l'entité User par ordre croissant par nom/prenom.
+ */
 #[ApiResource(
     order: ['lastName' => 'ASC','firstName' => 'ASC'],
 )]
@@ -33,6 +43,9 @@ class User
     private $birthDate;
 
     #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * Vérification de la bonne syntaxe d'un EMAIL
+     */
     #[Assert\Email(
         message: 'L\'Email {{ value }} n\'est pas valide.',
     )]

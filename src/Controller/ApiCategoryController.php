@@ -17,6 +17,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiCategoryController extends AbstractController
 {
+    /**
+     * Api manuelle 
+     * Méthode pour faire apparaître toutes les catégories
+     *
+     * @param CategoryRepository $repo
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/categories', name: 'api_categories',methods:["GET"])]
     public function list(CategoryRepository $repo, SerializerInterface $serializer): Response
     {
@@ -30,6 +38,14 @@ class ApiCategoryController extends AbstractController
         return new JsonResponse($resultat, 200,[],true);
     }
 
+    /**
+     * Api manuelle 
+     * Méthode pour faire apparaître une seule catégorie, selon Id.
+     *
+     * @param Category $category
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/category/{id}', name: 'api_category_show',methods:["GET"])]
     public function show(Category $category, SerializerInterface $serializer): Response
     {
@@ -42,6 +58,16 @@ class ApiCategoryController extends AbstractController
         return new JsonResponse($resultat,Response :: HTTP_OK,[],true);
     }
 
+    /**
+     * Api manuelle 
+     * Méthode pour creer une nouvelle catégorie
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @return Response
+     */
     #[Route('/api/category', name: 'api_category_create',methods:["POST"])]
     public function create(Request $request,EntityManagerInterface $manager, SerializerInterface $serializer,ValidatorInterface $validator): Response
     {
@@ -62,6 +88,7 @@ class ApiCategoryController extends AbstractController
         return new JsonResponse(
             "Le catégorie a bien été créé",
             Response :: HTTP_CREATED,
+            // Après la création, redirection sur la vue de la catégorie créée.
             //["location"=>"api/category/".$category->getId()],
             ["location"=>$this->generateUrl(
                 'api_category_show',
@@ -74,6 +101,17 @@ class ApiCategoryController extends AbstractController
        
     }
 
+    /**
+     * Api manuelle 
+     * Méthode pour modifier une catégorie
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager@param 
+     * @param Category $category
+     * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @return Response
+     */
     #[Route('/api/category/{id}', name: 'api_category_update',methods:["PUT"])]
     public function update(Request $request,EntityManagerInterface $manager, Category $category, SerializerInterface $serializer,ValidatorInterface $validator): Response
     {
@@ -93,6 +131,16 @@ class ApiCategoryController extends AbstractController
         return new JsonResponse('La catégorie a bien été modifié',Response :: HTTP_OK,[],true);
     }
 
+    
+    /**
+     * Api manuelle 
+     * Méthode pour supprimer une catégorie
+     *
+     * @param EntityManagerInterface $manager@param 
+     * @param Category $category
+     * @param SerializerInterface $serializer
+     * @return Response
+     */
     #[Route('/api/category/{id}', name: 'api_category_delete',methods:["DELETE"])]
     public function delete(EntityManagerInterface $manager, Category $category, SerializerInterface $serializer): Response
     {
