@@ -8,6 +8,9 @@ use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 /**
@@ -22,8 +25,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 #[ApiResource(
     order: ['lastName' => 'ASC','firstName' => 'ASC'],
+    normalizationContext: ['groups' => ['read']],
+    //denormalizationContext: ['groups' => ['post']],
+   collectionOperations: [ 
+        'post' => [ 
+            'normalization_context' => ['groups' => ['write:itemUser','write:itemGrade']]
+        ]
+    ]
+    
 )]
-class User
+class User implements PasswordAuthenticatedUserInterface,UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -32,14 +43,15 @@ class User
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listResourceFull'])]
+    #[Groups(['listResourceFull','read','write:itemUser'])]
     private $lastName;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listResourceFull'])]
+    #[Groups(['listResourceFull','read','write:itemUser'])]
     private $firstName;
 
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: 'date', nullable: true)]
+    #[Groups(['read','write:itemUser'])]
     private $birthDate;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -49,36 +61,44 @@ class User
     #[Assert\Email(
         message: 'L\'Email {{ value }} n\'est pas valide.',
     )]
-    #[Groups(['listResourceFull'])]
+    #[Groups(['listResourceFull','read','write:itemUser'])]
     private $email;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['write:itemUser'])]
     private $password;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(['listResourceFull'])]
+    #[Groups(['listResourceFull','read','write:itemUser'])]
     private $avatar;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups(['write:itemUser'])]
     private $isActif;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups(['write:itemUser'])]
     private $firstConnexion;
 
     #[ORM\ManyToOne(targetEntity: Grade::class, inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['write:itemUser'])]
     private $grade;
 
     #[ORM\Column(type: 'string', length: 10)]
+    #[Groups(['read','write:itemUser'])]
     private $phone;
 
     #[ORM\Column(type: 'datetime')]
+    //#[Groups(['write:itemUser'])]
     private $userCreationDate;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Resource::class)]
+    //#[Groups(['write'])]
     private $resources;
 
     #[ORM\OneToMany(mappedBy: 'users', targetEntity: Level::class)]
+    //#[Groups(['write'])]
     private $levels;
 
    
@@ -87,6 +107,7 @@ class User
     {
         $this->resources = new ArrayCollection();
         $this->levels = new ArrayCollection();
+        $this ->userCreationDate = new \DateTime();
     }
 
     public function getId(): ?int
@@ -283,6 +304,43 @@ class User
         }
 
         return $this;
+    }
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     *     public function getRoles()
+     *     {
+     *         return ['ROLE_USER'];
+     *     }
+     *
+     * Alternatively, the roles might be stored in a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return string[]
+     */
+    public function getRoles(): array
+    {
+            return ['ROLE_USER'];
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials(){
+
+    }
+
+    /**
+     * Returns the identifier for this user (e.g. its username or email address).
+     */
+    public function getUserIdentifier(): string
+    {
+       return $this->getEmail();
     }
 
     

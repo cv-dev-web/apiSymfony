@@ -26,6 +26,7 @@ class Content
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     //#[Groups(['listCategoryFull','listUserSimple','listContents','listContentDetail'])]
+    #[Groups(['listResourceFull'])]
     private $chemin;
 
     #[ORM\ManyToOne(targetEntity: Resource::class, inversedBy: 'contents')]

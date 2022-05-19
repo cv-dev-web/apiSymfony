@@ -15,13 +15,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 #[ApiResource(
     collectionOperations: ['get'],
-    itemOperations: ['get']
+    itemOperations: ['get'],
+    //denormalizationContext: ['groups' => ['post']]
 )]
 class Grade
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+   // #[Groups(['write:itemGrade'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)] private $gradeName;

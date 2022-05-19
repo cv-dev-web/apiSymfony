@@ -29,11 +29,11 @@ class Type
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['listResourceFull'])]
     private $typeName;
 
     #[ORM\OneToMany(mappedBy: 'type', targetEntity: Resource::class)]
-    #[Groups(['listResourceFull'])]
-
+   
     //#[ApiSubresource]
     private $resources;
 

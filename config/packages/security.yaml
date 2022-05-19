@@ -1,9 +1,12 @@
 security:
+    
     enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
-    password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    #password_hashers:
+        #Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+  
     providers:
         users_in_memory: { memory: null }
     firewalls:
@@ -28,7 +31,12 @@ security:
 
 when@test:
     security:
+        encoders: 
+            App\Entity\User:
+                algorithm: bcrypt
         password_hashers:
+            App\Entity\User:
+                algorithm: bcrypt
             # By default, password hashers are resource intensive and take time. This is
             # important to generate secure password hashes. In tests however, secure hashes
             # are not important, waste resources and increase test times. The following

@@ -15,7 +15,10 @@ use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['listResourceFull']],
+    
+)]
 #[ApiFilter(
     SearchFilter::class,
      properties: [  'title' => 'ipartial']
@@ -42,24 +45,28 @@ class Resource
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['listResourceFull'])]
+    #[ApiSubresource]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['listResourceFull'])]
+    #[ApiSubresource]
     private $category;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Content::class)]
-    //#[ApiSubresource]
+    #[Groups(['listResourceFull'])]
+    #[ApiSubresource]
     private $contents;
 
     #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['listResourceFull'])]
+    #[ApiSubresource]
     private $type;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['listResourceFull'])]
+    //#[Groups(['listResourceFull'])]
     private $modoValid;
 
     #[ORM\Column(type: 'text')]
