@@ -14,7 +14,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity(
     fields: ['users','resources']
     )]
-#[ApiResource()]
+/**
+ * Limitation de l'entité Level a la lecture ce celle-ci.
+ */
+#[ApiResource(
+    collectionOperations: ['get'],
+    itemOperations: ['get']
+)]
 class Level
 {
     #[ORM\Id]

@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -25,11 +26,12 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
  */
 #[ApiResource(
     order: ['lastName' => 'ASC','firstName' => 'ASC'],
-    normalizationContext: ['groups' => ['read']],
+    //normalizationContext: ['groups' => ['read']],
     //denormalizationContext: ['groups' => ['post']],
    collectionOperations: [ 
+       'get',
         'post' => [ 
-            'normalization_context' => ['groups' => ['write:itemUser','write:itemGrade']]
+            'normalization_context' => ['groups' => ['write:itemUser']]
         ]
     ]
     

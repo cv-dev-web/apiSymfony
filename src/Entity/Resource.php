@@ -17,11 +17,18 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['listResourceFull']],
+    collectionOperations: [ 
+        'get',
+        'post' => [ 
+            'normalization_context' => ['groups' => ['write:itemResource']]
+        ]
+    ]
     
 )]
 #[ApiFilter(
     SearchFilter::class,
-     properties: [  'title' => 'ipartial']
+    properties: [  'title' => 'ipartial']
+    
 )]
 class Resource
 {
@@ -32,7 +39,7 @@ class Resource
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['listResourceFull'])]
+    #[Groups(['listResourceFull','write:itemResource'])]
     private $title;
 
     #[ORM\Column(type: 'boolean')]
@@ -44,24 +51,24 @@ class Resource
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['listResourceFull'])]
+    #[Groups(['listResourceFull','write:itemResource'])]
     #[ApiSubresource]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['listResourceFull'])]
+    #[Groups(['listResourceFull','write:itemResource'])]
     #[ApiSubresource]
     private $category;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Content::class)]
-    #[Groups(['listResourceFull'])]
+    #[Groups(['listResourceFull','write:itemResource'])]
     #[ApiSubresource]
     private $contents;
 
     #[ORM\ManyToOne(targetEntity: Type::class, inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['listResourceFull'])]
+    #[Groups(['listResourceFull','write:itemResource'])]
     #[ApiSubresource]
     private $type;
 
@@ -70,14 +77,15 @@ class Resource
     private $modoValid;
 
     #[ORM\Column(type: 'text')]
-    #[Groups(['listResourceFull'])]
+    #[Groups(['listResourceFull','write:itemResource'])]
     private $text;
 
     #[ORM\OneToMany(mappedBy: 'resources', targetEntity: Level::class)]
     private $levels;
 
     #[ORM\ManyToOne(targetEntity: Status::class, inversedBy: 'resources')]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['write:itemResource'])]
     private $status;
 
     #[ORM\OneToMany(mappedBy: 'resources', targetEntity: Comment::class)]
@@ -88,6 +96,7 @@ class Resource
         $this->contents = new ArrayCollection();
         $this->levels = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this ->creationDate = new \DateTime();
     }
 
     public function getId(): ?int

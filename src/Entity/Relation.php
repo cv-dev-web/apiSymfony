@@ -9,7 +9,13 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: RelationRepository::class)]
-#[ApiResource()]
+/**
+ * Limitation de l'entité Level a la lecture ce celle-ci.
+ */
+#[ApiResource(
+    collectionOperations: ['get'],
+    itemOperations: ['get']
+)]
 class Relation
 {
     #[ORM\Id]

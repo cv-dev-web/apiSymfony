@@ -19,9 +19,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * ordonée par ordre croissant.
  */
 #[ApiResource(
+    normalizationContext: ['groups' => ['read']],
     collectionOperations: ['get'],
     itemOperations: ['get'],
-    order: ['catName' => 'ASC'],
+    order: ['catName' => 'ASC']
 )]
 /**
  * Vérification que chaque catégorie sois unique avec retour méssage d'erreur
@@ -36,7 +37,7 @@ class Category
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     //#[Groups(['listCategorySimple','listCategoryFull'])]
-    #[Groups(['listResourceFull'])]
+    #[Groups(['listResourceFull','read'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -50,8 +51,7 @@ class Category
         minMessage:"La catégorie doit avoir plus de {{ limit }} caractères",
         maxMessage:"La catégorie doit ne doit pas dépasser {{ limit }} caractères"
     )]
-    #[Groups(['listResourceFull'])]
-    //#[Groups(['listCategorySimple','listCategoryFull','listUserSimple','listResourceSimple'])]
+    #[Groups(['listResourceFull','read'])]
     private $catName;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Resource::class)]

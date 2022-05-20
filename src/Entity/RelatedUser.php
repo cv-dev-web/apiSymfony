@@ -14,7 +14,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity(
     fields: ['userOne','userTwo']
     )]
-#[ApiResource()]
+/**
+ * Limitation de l'entité RelatedUser a la lecture ce celle-ci.
+ */
+#[ApiResource(
+    collectionOperations: ['get'],
+    itemOperations: ['get']
+)]
 class RelatedUser
 {
     #[ORM\Id]
