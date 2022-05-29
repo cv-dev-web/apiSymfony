@@ -160,6 +160,7 @@ class Resource
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+        return $this;
         
     }
 

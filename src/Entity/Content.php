@@ -59,5 +59,11 @@ class Content
     {
         $this->resource = $resource;
         
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->chemin;
     }
 }
