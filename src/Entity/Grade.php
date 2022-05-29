@@ -26,7 +26,8 @@ class Grade
    // #[Groups(['write:itemGrade'])]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)] private $gradeName;
+    #[ORM\Column(type: 'string', length: 255)] 
+    private $gradeName;
 
     #[ORM\OneToMany(mappedBy: 'grade', targetEntity: User::class)]
     private $users;
@@ -81,5 +82,10 @@ class Grade
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->gradeName;
     }
 }
