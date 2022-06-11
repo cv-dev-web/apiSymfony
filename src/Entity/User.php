@@ -170,11 +170,10 @@ class User implements PasswordAuthenticatedUserInterface,UserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(string $password): void
     {
         $this->password = $password;
 
-        return $this;
     }
 
     public function getAvatar(): ?string
