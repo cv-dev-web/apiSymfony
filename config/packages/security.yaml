@@ -47,9 +47,16 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/apiPlatform/admin, roles: ROLE_ADMIN }
-        - { path: ^/apiPlatform/users, roles: PUBLIC_ACCESS}
+        - { path: ^/apiPlatform$, roles: PUBLIC_ACCESS}
+        - { path: ^/apiPlatform/create_user, roles: PUBLIC_ACCESS}
         - { path: ^/apiPlatform/login_check, roles: PUBLIC_ACCESS }
         - { path: ^/apiPlatform, roles: IS_AUTHENTICATED_FULLY }
+
+    role_hierarchy:
+        ROLE_MODO : ROLE_CITOYEN
+        ROLE_ADMIN: ROLE_MODO
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
+
 
 when@test:
     security:

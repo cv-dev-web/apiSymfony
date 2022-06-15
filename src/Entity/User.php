@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Grade;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
@@ -29,16 +30,25 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
     //normalizationContext: ['groups' => ['read']],
     //denormalizationContext: ['groups' => ['post']],
    collectionOperations: [ 
-       'get',
-        'post' => [ 
+        'get',
+        'post_user' => [ 
+            'method' => 'POST',
+            'path'=> '/create_user',
             'normalization_context' => ['groups' => ['write:itemUser']]
         ]
+        
     ]
     
 )]
 #[ORM\EntityListeners(['App\EntityListener\UserListener'])]
 class User implements PasswordAuthenticatedUserInterface,UserInterface
 {
+    const ROLE_ADMIN = "ROLE_ADMIN";
+    const ROLE_MODO = "ROLE_MODO";
+    const ROLE_SUPER_ADMIN = "ROLE_SUPER_ADMIN";
+    const ROLE_CITOYEN = "ROLE_CITOYEN";
+    const DEFAULT_ROLE = "ROLE_CITOYEN";
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -69,11 +79,11 @@ class User implements PasswordAuthenticatedUserInterface,UserInterface
     #[Groups(['listResourceFull','read','write:itemUser'])]
     private $email;
 
-    // #[ORM\Column(type: 'json')]
-    // private $roles = [];
+    //#[ORM\Column(type: 'json')]
+    //private $roles = [];
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['write:itemUser'])]
+    //#[Groups(['write:itemUser'])]
     #[Assert\NotBlank()]
     private $password;
 
@@ -82,18 +92,19 @@ class User implements PasswordAuthenticatedUserInterface,UserInterface
     private $avatar;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['write:itemUser'])]
+    //#[Groups(['write:itemUser'])]
     private $isActif;
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['write:itemUser'])]
+    //#[Groups(['write:itemUser'])]
     private $firstConnexion;
 
+    #[Groups(['write:itemUser'])]
     private ?String $plainPassword = null;
 
     #[ORM\ManyToOne(targetEntity: Grade::class, inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['write:itemUser'])]
+    //#[Groups(['write:itemUser'])]
     private $grade;
 
     #[ORM\Column(type: 'string', length: 10)]
@@ -123,6 +134,9 @@ class User implements PasswordAuthenticatedUserInterface,UserInterface
         $this->levels = new ArrayCollection();
         $this ->userCreationDate = new \DateTime();
         $this->comments = new ArrayCollection();
+        $this->roles = self::DEFAULT_ROLE;
+        $this->isActif = false;
+        $this->firstConnexion = true;
     }
 
     public function getId(): ?int
@@ -339,16 +353,26 @@ class User implements PasswordAuthenticatedUserInterface,UserInterface
      */
     public function getRoles(): array
     {
-        
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
 
-        return array_unique($roles);
+        return $this->grade;
     }
 
-    public function setRoles(array $roles): self
+    /**
+     * affectation des roles utilisateurs en rapport au grade
+     *
+     * @param array $grade
+     * @return self
+     */
+    public function setRoles(?Grade $grade): self
     {
-        $this->roles = $roles;
+        return match($grade)
+        {
+            "super administrateur"=> $this->roles = self::ROLE_SUPER_ADMIN,
+            "administrateur"=> $this->roles = self::ROLE_ADMIN,
+            "modérateur"=> $this->roles = self::ROLE_MODO,
+            "citoyen"=> $this->roles = self::ROLE_CITOYEN
+
+        };
 
         return $this;
     }
