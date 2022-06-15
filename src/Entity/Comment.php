@@ -35,6 +35,10 @@ class Comment
     #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'answerComment')]
     private $comments;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
+
     public function __construct()
     {
         $this->answerComment = new ArrayCollection();
@@ -141,6 +145,18 @@ class Comment
         if ($this->comments->removeElement($comment)) {
             $comment->removeAnswerComment($this);
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
