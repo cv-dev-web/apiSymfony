@@ -3,13 +3,16 @@
 namespace App\Entity;
 
 use App\Entity\Content;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ResourceRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -21,6 +24,10 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
         'get',
         'post' => [ 
             'normalization_context' => ['groups' => ['write:itemResource']]
+        ],
+        'get_invite_ressource' => [
+            'method' => 'GET',
+            'path' => '/invite/ressources',
         ]
     ]
     
@@ -62,6 +69,8 @@ class Resource
     private $category;
 
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Content::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    //#[ApiProperty(iri: 'http://schema.org/contents')]
     #[Groups(['listResourceFull','write:itemResource'])]
     #[ApiSubresource]
     private $contents;
@@ -96,7 +105,8 @@ class Resource
         $this->contents = new ArrayCollection();
         $this->levels = new ArrayCollection();
         $this->comments = new ArrayCollection();
-        $this ->creationDate = new \DateTime();
+        $this->creationDate = new \DateTime();
+        $this->getId();
     }
 
     public function getId(): ?int

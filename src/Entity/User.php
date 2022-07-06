@@ -79,13 +79,16 @@ class User implements PasswordAuthenticatedUserInterface,UserInterface
     #[Groups(['listResourceFull','read','write:itemUser'])]
     private $email;
 
-    //#[ORM\Column(type: 'json')]
-    //private $roles = [];
+    
+    private $roles = [];
 
     #[ORM\Column(type: 'string', length: 255)]
     //#[Groups(['write:itemUser'])]
     #[Assert\NotBlank()]
     private $password;
+
+    #[Groups(['write:itemUser'])]
+    private ?String $plainPassword = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Groups(['listResourceFull','read','write:itemUser'])]
@@ -98,9 +101,6 @@ class User implements PasswordAuthenticatedUserInterface,UserInterface
     #[ORM\Column(type: 'boolean')]
     //#[Groups(['write:itemUser'])]
     private $firstConnexion;
-
-    #[Groups(['write:itemUser'])]
-    private ?String $plainPassword = null;
 
     #[ORM\ManyToOne(targetEntity: Grade::class, inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
@@ -354,7 +354,7 @@ class User implements PasswordAuthenticatedUserInterface,UserInterface
     public function getRoles(): array
     {
 
-        return $this->grade;
+        return $this->roles;
     }
 
     /**
@@ -367,10 +367,10 @@ class User implements PasswordAuthenticatedUserInterface,UserInterface
     {
         return match($grade)
         {
-            "super administrateur"=> $this->roles = self::ROLE_SUPER_ADMIN,
-            "administrateur"=> $this->roles = self::ROLE_ADMIN,
-            "modérateur"=> $this->roles = self::ROLE_MODO,
-            "citoyen"=> $this->roles = self::ROLE_CITOYEN
+            "super administrateur"=> $this->roles = [self::ROLE_SUPER_ADMIN],
+            "administrateur"=> $this->roles = [self::ROLE_ADMIN],
+            "modérateur"=> $this->roles = [self::ROLE_MODO],
+            "citoyen"=> $this->roles = [self::ROLE_CITOYEN]
 
         };
 
